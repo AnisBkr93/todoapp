@@ -1,7 +1,7 @@
 <template>
-  <div class="task-form-container">
+  <div>
     <h3>Ajouter une nouvelle tâche</h3>
-    <form @submit.prevent="addTask" class="task-form">
+    <form @submit.prevent="addTask">
       <div class="form-group">
         <label for="title">Titre :</label>
         <input type="text" id="title" v-model="title" class="form-control" required>
@@ -12,22 +12,24 @@
       </div>
       <div class="form-group">
         <label for="deadline">Date limite :</label>
-        <input type="date" id="deadline" v-model="deadline" class="form-control" required>
+        <input type="date" id="deadline" v-model="deadline" class="form-control" :min="minDate" required>
       </div>
       <div class="form-group">
-        <label for="status">Statut :</label>
-        <select id="status" v-model="status" class="form-control" required>
-          <option selected value="Envisagé">Envisagé</option>
-          <option value="En cours">En cours</option>
-          <option value="Terminée">Terminée</option>
-          <option value="En attente">En attente</option>
-        </select>
+          <label for="status">Statut :</label>
+          <select id="status" v-model="status" class="form-control" required>
+            <option selected value="Envisagé">Envisagé</option>
+            <option value="En cours">En cours</option>
+            <option value="Terminée">Terminée</option>
+            <option value="En attente">En attente</option>
+          </select>
       </div>
-      <button type="submit" class="btn btn-success">Ajouter</button>
+      <div>
+            <br>
+        <button type="submit" class="btn btn-success">Ajouter</button>
+
+      </div>
     </form>
-    <transition name="fade">
-      <p v-if="message" class="text-success">{{ message }}</p>
-    </transition>
+    <p class="text-success"> {{ message }}   </p>
   </div>
 </template>
 
@@ -40,108 +42,72 @@ export default {
       title: '',
       description: '',
       deadline: '',
-      status: 'Envisagé', 
+      minDate: new Date().toISOString().split('T')[0], // Date minimale autorisée
+      status: 'Envisagé', // Valeur par défaut du statut,
       message: ""
     };
   },
   methods: {
-    async addTask() {
-      try {
-        const token = localStorage.getItem('token'); 
-        const headers = { Authorization: `Bearer ${token}` };
-        const data = {
-          title: this.title,
-          description: this.description,
-          deadline: this.deadline,
-          status: this.status,
-        };
-        await axios.post('/api/tasks/newtask',  {data: data} ,  { headers: {...headers,'Content-Type': 'application/json', },});
-        this.$emit('task-added'); 
-        this.title = '';
-        this.description = '';
-        this.deadline = '';
-        this.status = 'Envisagé';
-        this.message = "Tâche ajoutée avec succès";
-        
-        setTimeout(() => {
-          this.message = ""
-        }, 5000);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+      async addTask() 
+      {
+          try {
+              const token = localStorage.getItem('token'); // Assurez-vous de stocker le token correctement
+              const headers = { Authorization: `Bearer ${token}` };
+              const data = 
+              {
+              title: this.title,
+              description: this.description,
+              deadline: this.deadline,
+              status: this.status, // Ajout du statut
+              };
+              //console.log(data)
+              await axios.post('/api/tasks/newtask',  {data: data} ,  { headers: {...headers,'Content-Type': 'application/json', },});
+              this.$emit('task-added'); // Émet un événement pour informer le parent de l'ajout de la tâche
+              this.title = '';
+              this.description = '';
+              this.deadline = '';
+              
+              this.message = "Tâche ajoutée avec succès"
+
+              setTimeout(()=>
+              {
+                this.message = ""
+              }, 5000)
+          } 
+          catch (error) 
+          {
+              console.log(error);
+          }
+      },
   },
 };
 </script>
 
 <style scoped>
-.task-form-container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.task-form h3 {
-  margin-bottom: 20px;
-  text-align: center;
-  color: #343a40;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #495057;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.form-control:focus {
-  border-color: #80bdff;
-  outline: none;
-  box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
-}
-
+/* Utilisez ici vos styles CSS pour personnaliser l'apparence du formulaire de tâche */
+/* Button styling */
 .btn-success {
-  width: 100%;
-  padding: 10px;
-  background-color: #28a745;
-  border: none;
-  border-radius: 4px;
+  background-color: #000000;
   color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  width: 100%;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .btn-success:hover {
-  background-color: #218838;
+  background-color: #00274d;
+  transform: translateY(-2px);
 }
 
+/* Success message styling */
 .text-success {
-  margin-top: 20px;
+  color: #f70000;
+  font-size: 1rem;
+  margin-top: 15px;
   text-align: center;
-  font-size: 16px;
-  color: #28a745;
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0;
 }
 </style>

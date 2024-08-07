@@ -12,15 +12,14 @@ const authRouter = require('./src/routes/userRoutes');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-//
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(express.json());
 //app.use(cors());
 app.use(bodyParser.json());
-// Utilisation des routes
-app.use('/api/tasks', taskRouter);
-app.use('/api/auth', authRouter);
+// app.use(history());
+
 // Configuration des en-têtes de réponse pour gérer les requêtes CORS
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -45,7 +44,8 @@ app.use((req, res, next) => {
   app.get('/', (req, res) => {
     res.send('Bienvenue dans votre gestionnaire de tâches !');
   });
-  app.use('/api/tasks', taskRouter);
+// Utilisation des routes
+app.use('/api/tasks', taskRouter);
 app.use('/api/auth', authRouter);
 
 PORT = 3000;
@@ -53,10 +53,6 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-
-
-
-    
 
 
 

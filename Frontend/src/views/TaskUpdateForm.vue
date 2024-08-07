@@ -112,10 +112,87 @@
   </script>
   
   <style scoped>
-  /* Ajoutez des styles CSS pour le message de succès */
-  .text-success
-  {
-    margin-top: 10px;
-    color: green;
-  }
+  /* Container styling */
+div {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styling */
+h3 {
+  color: #00274d;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Form group styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Label styling */
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #00274d;
+}
+
+/* Input and textarea styling */
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #00274d;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 68, 148, 0.2);
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: #00274d;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Loading animation styling */
+.loading-animation {
+  color: #007bff;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Success message styling */
+.text-success {
+  color: #bd0a0a;
+  font-size: 1rem;
+  margin-top: 15px;
+  text-align: center;
+}
+
   </style>

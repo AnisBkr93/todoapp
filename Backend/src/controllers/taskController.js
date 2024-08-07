@@ -36,24 +36,11 @@ exports.createTask = (req, res, next) => {
   if (taskObject.deadline) {
     taskObject.deadline = new Date(taskObject.deadline);
   }
-  const task = new Task({ ...taskObject, user: req.userId, status: "Envisagé" });
+  const task = new Task({ ...taskObject, user: req.auth.userId , status : taskObject.status  });
   task.save()
     .then(() => { res.status(201).json({ message: 'Tâche enregistrée !' }); })
     .catch(error => { res.status(400).json({ error }); });
 }
-// // router.post('/create', async (req, res) => {
-// //     try {
-// //         const { title , description  } = req.body;
-// //         const { id } = req.headers;
-// //         const newTask = new Task(req.body);
-// //         await newTask.save();
-// //         id = newTask._id ;
-// //         await User.findByIdAndUpdate(id, { $push: { tasks: newTask._id } });
-// //         res.status(201).send({newTask , message : 'Task created successfully'});
-// //     } catch (error) {
-// //         res.status(400).send(error);
-// //     }
-// // });
 
 // Mettre à jour une tâche par son ID
 exports.updateTask = async (req, res) => {

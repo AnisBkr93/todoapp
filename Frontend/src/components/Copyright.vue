@@ -19,7 +19,7 @@
     {
       return {
         currentYear: new Date().getFullYear(),
-        githubProfile: 'https://github.com/Anisbkr93', // Remplacez par le lien vers votre profil GitHub
+        githubProfile: 'https://github.com/AnisBkr93/todoapp', // Remplacez par le lien vers votre profil GitHub
       };
     },
   };

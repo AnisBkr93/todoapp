@@ -1,31 +1,29 @@
 <template>
-  <div class="d-flex justify-content-center task-list-container">
+  <div class="d-flex justify-content-center">
     <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Titre</th>
-            <th>Description</th>
-            <th>Date limite</th>
-            <th>Statut</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <transition-group name="fade" tag="tbody">
-            <tr v-for="task in tasks" :key="task._id">
-              <td>{{ task.title }}</td>
-              <td>{{ task.description }}</td>
-              <td>{{ formatDeadline(task.deadline) }}</td>
-              <td>{{ task.status }}</td>
-              <td>
-                <button @click="deleteTask(task._id)" class="btn btn-danger btn-sm">Supprimer</button>
-                <router-link :to="'/update/' + task._id" class="btn btn-primary btn-sm">Mettre à jour</router-link>
-              </td>
-            </tr>
-          </transition-group>
-        </tbody>
-      </table>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Description</th>
+          <th>Date limite</th>
+          <th>Statut</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="task in tasks" :key="task._id">
+          <td>{{ task.title }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ formatDeadline(task.deadline) }}</td>
+          <td>{{ task.status }}</td>
+          <td>
+            <button @click="deleteTask(task._id)" class="btn btn-danger">Supprimer</button>
+            <router-link :to="'/update/' + task._id" class="btn btn-primary">Mêttre à jour</router-link>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     </div>
   </div>
 </template>
@@ -34,25 +32,8 @@
 import axios from 'axios';
 
 export default {
-  data() {
-    return {
-      tasks: []
-    };
-  },
-  created() {
-    this.fetchTasks();
-  },
+  props: ['tasks'],
   methods: {
-    async fetchTasks() {
-      try {
-        const token = localStorage.getItem('token');
-        const headers = { Authorization: `Bearer ${token}` };
-        const response = await axios.get('/api/tasks', { headers });
-        this.tasks = response.data;
-      } catch (error) {
-        console.log(error.message);
-      }
-    },
     formatDeadline(deadline) {
       return new Date(deadline).toLocaleDateString();
     },
@@ -61,51 +42,90 @@ export default {
         const token = localStorage.getItem('token');
         const headers = { Authorization: `Bearer ${token}` };
         await axios.delete(`/api/tasks/deletetask/${taskId}`, { headers });
-        this.fetchTasks();
+        this.$emit('task-deleted');
       } catch (error) {
         console.log(error.message);
       }
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-.task-list-container {
-  width: 100%;
-  margin: 20px;
+/* Container for centering the table */
+.d-flex {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
 }
 
+/* Table styling */
 .table {
   width: 100%;
-  margin-bottom: 20px;
+  max-width: 1200px;
   border-collapse: collapse;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.table th, .table td {
+/* Table header styling */
+.table thead {
+  background-color: #0056b3;
+  color: #ffffff;
+}
+
+.table thead th {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  font-weight: bold;
 }
 
-.table th {
-  background-color: #343a40;
-  color: white;
+/* Table body styling */
+.table tbody tr {
+  border-bottom: 1px solid #dddddd;
 }
 
-.table-hover tbody tr:hover {
+.table tbody td {
+  padding: 12px 15px;
+  font-size: 14px;
+}
+
+/* Hover effect for table rows */
+.table tbody tr:hover {
   background-color: #f1f1f1;
 }
 
-.btn {
-  margin-right: 5px;
+/* Button styling for actions */
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-right: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s;
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
 }
 
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0;
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
 </style>

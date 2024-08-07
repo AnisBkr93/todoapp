@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!-- Barre de navigation Bootstrap -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-success" id="app">
+    <!-- Barre de navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="app">
       <div class="container-fluid">
 
         <!-- Marque de la navigation (Logo ou nom du site) -->
@@ -24,11 +24,14 @@
         <!-- Contenu de la barre de navigation -->
         <div class="collapse navbar-collapse" :class="{ 'show': isNavbarOpen }" id="navbarNavDropdown">
           <!-- Liste des liens de navigation -->
-          <ul class="navbar-nav">
+          <ul class="navbar-nav navbar-left">
             <li class="nav-item">
               <!-- Lien vers la page 'UserPage' -->
-              <router-link to="/UserPage" class="nav-link">Ma Page</router-link>
+              <router-link to="/UserPage" class="nav-link">Dashboard</router-link>
             </li>
+            
+          </ul>
+          <ul class="navbar-nav ms-auto navbar-right">
             <li class="nav-item">
               <!-- Lien vers la page 'login' -->
               <router-link to="/login" class="nav-link">Connexion</router-link>
@@ -64,27 +67,58 @@ export default {
 
 <style lang="scss">
 .navbar {
-  padding: 20px;
+  padding: 15px 20px;
+  background-color: #00274d; /* Dark blue background */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .navbar-brand {
   font-weight: bold;
-  color: #fff;
-  font-size: 20px;
+  color: #ffffff;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+.navbar-toggler {
+  border-color: #ffffff;
 }
 
 .navbar-toggler-icon {
-  background-color: #fff;
+  background-image: url('data:image/svg+xml;base64,...'); /* You can use a custom icon here */
+}
+
+.navbar-nav {
+  display: flex;
+}
+
+.navbar-left {
+  display: flex;
+}
+
+.navbar-right {
+  display: flex;
+  margin-left: auto;
 }
 
 .nav-link {
-  font-weight: bold;
-  color: #fff;
+  font-weight: 500;
+  color: #ffffff;
   margin-right: 20px;
-  font-size: 18px;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #d3d3d3; /* Light grey on hover */
 }
 
 .router-link-exact-active {
   text-decoration: underline;
+}
+
+.collapse {
+  transition: max-height 0.3s ease;
 }
 </style>

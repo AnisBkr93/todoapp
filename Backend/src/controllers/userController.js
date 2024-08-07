@@ -6,46 +6,18 @@ const User = require('../models/user');
 
 // Fonction d'inscription d'un nouvel utilisateur
 exports.register = (req, res, next) => {
-        const { email, password } = req.body;
-        try {
-            // Vérifiez si l'utilisateur existe déjà
-            User.findOne({ email })
-                .then(user => {
-                    if (user) {
-                        return res.status(400).json({ message: 'Cet utilisateur existe déjà.' });
-                    }
-                    // Créez un nouvel utilisateur
-                    bcrypt.hash(password, 10)
-                        .then(hash => {
-                            const newUser = new User({ email, password: hash });
-                            newUser.save()
-                                .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                                .catch(error => res.status(400).json({ error }));
-                        })
-                        .catch(error => res.status(500).json({ error }));
-                })
-                .catch(error => res.status(500).json({ error }));
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Erreur lors de la création de l\'utilisateur.' });
-        }
+    bcrypt.hash(req.body.password, 10)
+        .then(hash => {
+            const user = new User({
+                email: req.body.email,
+                password: hash
+            });
+            user.save()
+                .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
+                .catch(error => res.status(400).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
 };
-// router.post('/register', async (req, res) => {
-//     const { username , email , password } = req.body;
-//     try {
-//         const existingUser = await User.findOne({ email });
-//         if (existingUser) {
-//             return res.send({ message: 'User already exists' });
-//         }
-//         const user = new User(req.body);
-//         await user.save();
-//         console.log('user created is : ' , user);
-//         res.status(201).send({user , message : 'User created successfully'});
-//     } catch (error) {
-//         res.status(400).send(error);
-//     }
-// }
-// );
 
 // Fonction de connexion de l'utilisateur
 exports.login = (req, res, next) => {
